@@ -25,7 +25,7 @@ const iLoveJsColorOptions = `
   <option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option> 
 `;
 
-/*Set theme specific color functions and add event listener to Theme select
+/*Set theme specific color functions and add event listener to theme select input
  *These functions are to be called whenever a user selects a theme
  *
 */
@@ -63,3 +63,38 @@ themeSelect.addEventListener('change', e => {
 		hideColors();
 	}
 });
+
+
+/*Set event listener on workshop checkboxes and add a running price total
+ *Make sure no workshops with conflicting days and times can be selected at the same time
+ *Keep a running total of prices
+*/
+const activityCheckboxes = document.querySelectorAll('.activities input');
+const totalPriceLabel = document.createElement('label');
+let totalPrice = 0;
+totalPriceLabel.className = 'total-price';
+document.querySelector('.activities').append(totalPriceLabel);
+totalPriceLabel.innerHTML = `<h2>Total: $0</h2>`;
+
+document.querySelector('.activities').addEventListener('change', e => {
+	let costOfActivities = 0;
+	const clicked = e.target;
+	const clickedDayAndTime = clicked.getAttribute('data-day-and-time');
+	for ( let i = 0; i < activityCheckboxes.length; i++ ) {
+		const checkBoxDayAndTime = activityCheckboxes[i].getAttribute('data-day-and-time');
+		if( checkBoxDayAndTime === clickedDayAndTime && clicked !== activityCheckboxes[i] ){
+			if( clicked.checked ){
+				activityCheckboxes[i].disabled = true;
+			} else {
+				activityCheckboxes[i].disabled = false;
+			}
+		}
+		const checkBoxPrice = parseInt(activityCheckboxes[i].getAttribute('data-cost') );
+		if (activityCheckboxes[i].checked) {
+			costOfActivities += checkBoxPrice;
+		}
+	}
+	totalPriceLabel.innerHTML = `<h2>Total: $${costOfActivities}</h2>`;
+	totalPrice = costOfActivites;
+});
+
