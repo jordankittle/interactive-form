@@ -30,9 +30,8 @@ const iLoveJsColorOptions = `
  *
 */
 function hideColors(){
-	colorSelect.innerHTML = `
-	<option value="Please select a color theme">Please Select a color theme</option>
-`;
+	colorSelect.innerHTML = ``;
+	document.querySelector('#shirt-colors label').textContent = 'Please select a T-shirt theme';
 }
 function displayJsPunsColors(){
 	const jsPunsColorOptions = `
@@ -41,6 +40,7 @@ function displayJsPunsColors(){
 	  <option value="gold">Gold (JS Puns shirt only)</option>
 	`;
 	colorSelect.innerHTML = jsPunsColorOptions;
+	document.querySelector('#shirt-colors label').textContent = 'Color:';
 }
 function displayILoveJsColors(){
 	const iLoveJsColorOptions = `
@@ -49,6 +49,7 @@ function displayILoveJsColors(){
 	  <option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option> 
 	`;
 	colorSelect.innerHTML = iLoveJsColorOptions;
+	document.querySelector('#shirt-colors label').textContent = 'Color:';
 }
 
 themeSelect.addEventListener('change', e => {
@@ -61,11 +62,4 @@ themeSelect.addEventListener('change', e => {
 	} else {
 		hideColors();
 	}
-/*	for( let i = 0; i < themeOptions.length; i++ ){
-		if( themeOptions ){
-
-		} else {
-
-		}
-	}*/
 });
