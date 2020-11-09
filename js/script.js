@@ -8,20 +8,225 @@
  * 3.) Hide the color options and set the Color: field to 'Please select a T-shirt theme'
 */
 
-const name = document.getElementById('name').focus();
-const email = document.getElementById('email');
-const themeSelect = document.getElementById('design');
+const form = document.querySelector('form');
+const name = document.getElementById('name');
+const email = document.getElementById('mail');
 const jobRoleInput = document.getElementById('title');
+const jobRoleOptions = document.querySelectorAll('#title option');
 const otherJobRoleInput = document.getElementById('other-title');
 otherJobRoleInput.style.display = 'none';
+const tShirtSize = document.getElementById('size');
+const themeSelect = document.getElementById('design');
+const themeSelectOptions = document.querySelectorAll('#design option');
+const colorSelect = document.getElementById('color');
 const colorOptions = document.querySelectorAll('#color option');
-const colorSelect = document.querySelector('#color');
+const activityCheckboxes = document.querySelectorAll('.activities input');
+const paymentSelect = document.getElementById('payment');
+const paymentOptions = document.querySelectorAll('#payment option');
+const creditCardNumber = document.getElementById('cc-num');
+const zipCode = document.getElementById('zip');
+const cvv = document.getElementById('cvv');
+const expirationMonth = document.getElementById('exp-month');
+const expirationMonthOptions = document.querySelectorAll('#exp-month option');
+const expirationYear = document.getElementById('exp-year');
+const expirationYearOptions = document.querySelectorAll('#exp-year option');
+const creditCard = document.querySelector('#credit-card');
+const paypal = document.querySelector('#paypal');
+const bitcoin = document.querySelector('#bitcoin');
+
+name.focus();
 hideColors();
+paypal.style.display = 'none';
+bitcoin.style.display = 'none';
+
+/* Validation functions
+ *
+ *
+*/
+function nameValidator(){
+	if(/^[a-zA-Z]+ ?\w+.*?$/.test(name.value) ){
+		name.previousElementSibling.textContent = "Name:";
+		name.previousElementSibling.style.color = 'black';
+		name.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
+		return true;
+	}
+	name.previousElementSibling.textContent = "Enter a Name";
+	name.previousElementSibling.style.color = 'red';
+	name.style.cssText = 'color: red; border: 2px solid red';
+	return false;
+}
+
+function emailValidator(){
+	if(/^\w+(_|.)*?@\w+\.[a-z]+$/.test(email.value) ){
+		email.previousElementSibling.textContent = "Email:";
+		email.previousElementSibling.style.color = 'black';
+		email.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
+		return true;
+	} else if ( email.value == "" ) {
+		email.previousElementSibling.textContent = "E-mail is blank";
+		email.previousElementSibling.style.color = 'red';
+		email.style.cssText = 'color: red; border: 2px solid red';
+	} else {
+		email.previousElementSibling.textContent = "Enter a valid e-mail address";
+		email.previousElementSibling.style.color = 'red';
+		email.style.cssText = 'color: red; border: 2px solid red';
+		return false;
+	}
+	
+}
+	
+
+function jobRoleValidator(){
+	if( jobRoleInput.value === 'other' ){
+		if (/^\w+/.test(otherJobRoleInput.value) && otherJobRoleInput.value !== 'Your Job Role'  ) {
+			otherJobRoleInput.style.color = 'black';
+			otherJobRoleInput.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
+			return true;
+		}
+		otherJobRoleInput.value = "Your Job Role";
+		otherJobRoleInput.style.color = 'red';
+		otherJobRoleInput.style.cssText = 'color: red; border: 2px solid red';
+		return false;
+	}
+	return true;
+}
+function themeSelectValidator(){
+	if(themeSelect.selectedIndex !== 0){
+	themeSelect.previousElementSibling.textContent = "Design:";
+	themeSelect.style.color = 'black';
+	themeSelect.previousElementSibling.style.color = 'black';
+	themeSelect.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220)';
+		return true;
+	}
+	themeSelect.previousElementSibling.textContent = "Please select a design";
+	themeSelect.style.color = 'red';
+	themeSelect.previousElementSibling.style.color = 'red';
+	themeSelect.style.cssText = 'color: red; border: 2px solid red';
+	return false;
+} 
+
+function activityCheckboxesValidator(){
+	const activityHeading = document.querySelector('.activities legend');
+	if( activityCheckboxes[0].checked ){
+		let activitiesAttending = 0;
+		for( let i = 0; i < activityCheckboxes.length; i++ ){
+			if(activityCheckboxes[i].checked){
+				activitiesAttending++;
+			}
+		}
+		if(activitiesAttending >= 2){
+			activityHeading.textContent = 'Register for Activities';
+			activityHeading.style.color = 'black';
+			return true;
+		}
+
+	}
+	
+	activityHeading.textContent = 'Please select at least one activity in addition to the main conference.';
+	activityHeading.style.color = 'red';
+	activityHeading.scrollIntoView();
+	return false;
+}
+function creditCardNumberValidator(){
+	if( /^(\d{4})( |-)?(\d{4})( |-)?(\d{4})( |-)?(\d{1,4}) *?$/.test( creditCardNumber.value ) ){
+		let oldNumber = creditCardNumber.value;
+		creditCardNumber.value = oldNumber.replace(/^(\d{4})( |-)?(\d{4})( |-)?(\d{4})( |-)?(\d{1,4}) *?$/, '$1 $3 $5 $7');
+		creditCardNumber.previousElementSibling.textContent = "Card Number:";
+		creditCardNumber.previousElementSibling.style.color = 'black';
+		creditCardNumber.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
+
+
+		return true;
+	}
+	creditCardNumber.previousElementSibling.textContent = "Enter a Valid Credit Card Number";
+	creditCardNumber.previousElementSibling.style.color = 'red';
+	creditCardNumber.style.cssText = 'color: red; border: 2px solid red';
+	return false;
+}
+function zipCodeValidator(){
+	if( /^(\d{5})(-?| ?)(\d{4})?$/.test( zipCode.value ) ){
+		let oldNumber = zipCode.value;
+		if ( zipCode.value.length > 5 ) {
+			zipCode.value = oldNumber.replace(/^(\d{5})(-?| ?)(\d{4})?$/, '$1-$3');
+		}
+		zipCode.previousElementSibling.textContent = "Zip Code:";
+		zipCode.previousElementSibling.style.color = 'black';
+		zipCode.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
+
+
+		return true;
+	}
+	zipCode.previousElementSibling.textContent = "Enter a Valid Zip";
+	zipCode.previousElementSibling.style.color = 'red';
+	zipCode.style.cssText = 'color: red; border: 2px solid red';
+	return false;
+}
+function cvvValidator(){
+	if( /^\d{3}$/.test( cvv.value ) ){
+		let oldNumber = cvv.value;
+		cvv.previousElementSibling.textContent = "CVV:";
+		cvv.previousElementSibling.style.color = 'black';
+		cvv.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
+
+
+		return true;
+	}
+	cvv.previousElementSibling.textContent = "Enter a Valid CVV";
+	cvv.previousElementSibling.style.color = 'red';
+	cvv.style.cssText = 'color: red; border: 2px solid red';
+	return false;
+}
+
+function validateForm(){
+	let isValidated = false;
+	isValidated = nameValidator();
+	isValidated = emailValidator();
+	isValidated = jobRoleValidator();
+	isValidated = themeSelectValidator();
+	isValidated = activityCheckboxesValidator();
+	if ( paymentSelect.value === 'credit card' ){
+		isValidated = creditCardNumberValidator();
+		isValidated = zipCodeValidator();
+		isValidated = cvvValidator();
+	}
+	
+	return isValidated;
+
+}
+
+form.addEventListener('submit', (e) => {
+	
+	if( !validateForm() ){
+		e.preventDefault();
+	}
+});
+
+name.addEventListener('change', (e) => {
+	nameValidator();
+});
+email.addEventListener('keyup', (e) => {
+	emailValidator();
+});
+otherJobRoleInput.addEventListener('blur', (e) => {
+	jobRoleValidator();
+});
+creditCardNumber.addEventListener('change', (e) => {
+	creditCardNumberValidator();
+});
+zipCode.addEventListener('change', (e) => {
+	zipCodeValidator();
+});
+cvv.addEventListener('change', (e) => {
+	cvvValidator();
+});
+
+
 
 //Set even listener on job role and display other-title input if 'other' is selected
 jobRoleInput.addEventListener('change', e => {
 	if( event.target.value === 'other' ){
 		otherJobRoleInput.style.display = '';
+		otherJobRoleInput.focus();
 	} else {
 		otherJobRoleInput.style.display = 'none';
 	}
@@ -43,6 +248,7 @@ const iLoveJsColorOptions = `
 function hideColors(){
 	colorSelect.innerHTML = ``;
 	document.querySelector('#shirt-colors label').textContent = 'Please select a T-shirt theme';
+	colorSelect.style.display = 'none'
 }
 function displayJsPunsColors(){
 	const jsPunsColorOptions = `
@@ -50,6 +256,7 @@ function displayJsPunsColors(){
 	  <option value="darkslategrey">Dark Slate Grey (JS Puns shirt only)</option> 
 	  <option value="gold">Gold (JS Puns shirt only)</option>
 	`;
+	colorSelect.style.display = '';
 	colorSelect.innerHTML = jsPunsColorOptions;
 	document.querySelector('#shirt-colors label').textContent = 'Color:';
 }
@@ -59,6 +266,7 @@ function displayILoveJsColors(){
 	  <option value="steelblue">Steel Blue (I &#9829; JS shirt only)</option> 
 	  <option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option> 
 	`;
+	colorSelect.style.display = '';
 	colorSelect.innerHTML = iLoveJsColorOptions;
 	document.querySelector('#shirt-colors label').textContent = 'Color:';
 }
@@ -73,14 +281,16 @@ themeSelect.addEventListener('change', e => {
 	} else {
 		hideColors();
 	}
+	themeSelectValidator();
 });
 
 
 /*Set event listener on workshop checkboxes and add a running price total
  *Make sure no workshops with conflicting days and times can be selected at the same time
+ *Workshops not available are turned red and striked for accesibility to users with color blindness
  *Keep a running total of prices
 */
-const activityCheckboxes = document.querySelectorAll('.activities input');
+
 const totalPriceLabel = document.createElement('label');
 let totalPrice = 0;
 totalPriceLabel.className = 'total-price';
@@ -96,8 +306,10 @@ document.querySelector('.activities').addEventListener('change', e => {
 		if( checkBoxDayAndTime === clickedDayAndTime && clicked !== activityCheckboxes[i] ){
 			if( clicked.checked ){
 				activityCheckboxes[i].disabled = true;
+				activityCheckboxes[i].parentNode.style.cssText = 'text-decoration: line-through; color: rgba(255,0,0,.5)';
 			} else {
 				activityCheckboxes[i].disabled = false;
+				activityCheckboxes[i].parentNode.style.cssText = 'text-decoration: none; color: rgba(0,0,0,1)';
 			}
 		}
 		const checkBoxPrice = parseInt(activityCheckboxes[i].getAttribute('data-cost') );
@@ -114,8 +326,7 @@ document.querySelector('.activities').addEventListener('change', e => {
  *Loop through all payment options and select by value to make sure credit card always selected even if options change
  *"Select Payment" option is set be disabled
 */
-const paymentSelect = document.querySelector('#payment');
-const paymentOptions = document.querySelectorAll('#payment option');
+
 for (let i = 0; i < paymentOptions.length; i++) {
 	if( paymentOptions[i].value === 'credit card' ){
 		paymentSelect.selectedIndex = i;
@@ -124,11 +335,6 @@ for (let i = 0; i < paymentOptions.length; i++) {
 		paymentOptions[i].disabled = true;
 	}
 }
-const creditCard = document.querySelector('#credit-card');
-const paypal = document.querySelector('#paypal');
-const bitcoin = document.querySelector('#bitcoin');
-paypal.style.display = 'none';
-bitcoin.style.display = 'none';
 
 
 /*Set functions to handle payment option changes and set listener on payment select
