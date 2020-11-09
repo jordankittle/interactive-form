@@ -40,11 +40,11 @@ paypal.style.display = 'none';
 bitcoin.style.display = 'none';
 
 /* Validation functions
- *
- *
+ * Check that information entered is valid and alert user if not
+ * Return true or false that the information is valid
 */
 function nameValidator(){
-	if(/^[a-zA-Z]* ?\w+.*?$/.test(name.value) ){
+	if(/\w.*/.test(name.value) ){
 		name.previousElementSibling.textContent = "Name:";
 		name.previousElementSibling.style.color = 'black';
 		name.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
@@ -75,7 +75,6 @@ function emailValidator(){
 	
 }
 	
-
 function jobRoleValidator(){
 	if( jobRoleInput.value === 'other' ){
 		if (/^\w+/.test(otherJobRoleInput.value) && otherJobRoleInput.value !== 'Your Job Role'  ) {
@@ -90,6 +89,7 @@ function jobRoleValidator(){
 	}
 	return true;
 }
+
 function themeSelectValidator(){
 	if(themeSelect.selectedIndex !== 0){
 	themeSelect.previousElementSibling.textContent = "Design:";
@@ -127,6 +127,7 @@ function activityCheckboxesValidator(){
 	activityHeading.scrollIntoView();
 	return false;
 }
+
 function creditCardNumberValidator(){
 	if( /^(\d{4})( |-)?(\d{4})( |-)?(\d{4})( |-)?(\d{1,4}) *?$/.test( creditCardNumber.value ) ){
 		let oldNumber = creditCardNumber.value;
@@ -143,6 +144,7 @@ function creditCardNumberValidator(){
 	creditCardNumber.style.cssText = 'color: red; border: 2px solid red';
 	return false;
 }
+
 function zipCodeValidator(){
 	if( /^(\d{5})(-?| ?)(\d{4})?$/.test( zipCode.value ) ){
 		let oldNumber = zipCode.value;
@@ -161,6 +163,7 @@ function zipCodeValidator(){
 	zipCode.style.cssText = 'color: red; border: 2px solid red';
 	return false;
 }
+
 function cvvValidator(){
 	if( /^\d{3}$/.test( cvv.value ) ){
 		let oldNumber = cvv.value;
@@ -177,6 +180,8 @@ function cvvValidator(){
 	return false;
 }
 
+//Run each validation function and return a true or false if all of them pass
+//Only validate credit card field if that is the payment method currently selected
 function validateForm(){
 	let isValidated = false;
 	isValidated = nameValidator();
@@ -193,7 +198,7 @@ function validateForm(){
 	return isValidated;
 
 }
-
+// Call the validateForm function on submit
 form.addEventListener('submit', (e) => {
 	
 	if( !validateForm() ){
@@ -201,7 +206,7 @@ form.addEventListener('submit', (e) => {
 	}
 });
 
-name.addEventListener('change', (e) => {
+name.addEventListener('keyup', (e) => {
 	nameValidator();
 });
 email.addEventListener('keyup', (e) => {
@@ -236,14 +241,6 @@ jobRoleInput.addEventListener('change', e => {
 });
 
 
-
-
-const iLoveJsColorOptions = `
-  <option value="tomato">Tomato (I &#9829; JS shirt only)</option>
-  <option value="steelblue">Steel Blue (I &#9829; JS shirt only)</option> 
-  <option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option> 
-`;
-
 /*Set theme specific color functions and add event listener to theme select input
  *These functions are to be called whenever a user selects a theme
  *
@@ -274,6 +271,7 @@ function displayILoveJsColors(){
 	document.querySelector('#shirt-colors label').textContent = 'Color:';
 }
 
+//Dispplay correct shirt colors in accordance with currently selected theme
 themeSelect.addEventListener('change', e => {
 	const selectValue = e.target.value;
 	const themeOptions = themeSelect.querySelectorAll('option');
@@ -290,7 +288,7 @@ themeSelect.addEventListener('change', e => {
 
 /*Set event listener on workshop checkboxes and add a running price total
  *Make sure no workshops with conflicting days and times can be selected at the same time
- *Workshops not available are turned red and striked for accesibility to users with color blindness
+ *Workshops not available are turned red and also striked for accesibility to users with color blindness
  *Keep a running total of prices
 */
 
@@ -327,7 +325,7 @@ document.querySelector('.activities').addEventListener('change', e => {
 
 /*Set payment default to credit card and hide other payment options
  *Loop through all payment options and select by value to make sure credit card always selected even if options change
- *"Select Payment" option is set be disabled
+ *"Select Payment" option is set to disabled
 */
 
 for (let i = 0; i < paymentOptions.length; i++) {
