@@ -107,14 +107,14 @@ function themeSelectValidator(){
 
 function activityCheckboxesValidator(){
 	const activityHeading = document.querySelector('.activities legend');
-	if( activityCheckboxes[0].checked ){
+	if( activityCheckboxes[0].checked || !activityCheckboxes[0].checked ){
 		let activitiesAttending = 0;
 		for( let i = 0; i < activityCheckboxes.length; i++ ){
 			if(activityCheckboxes[i].checked){
 				activitiesAttending++;
 			}
 		}
-		if(activitiesAttending >= 2){
+		if(activitiesAttending >= 1){
 			activityHeading.textContent = 'Register for Activities';
 			activityHeading.style.color = 'black';
 			return true;
@@ -122,7 +122,7 @@ function activityCheckboxesValidator(){
 
 	}
 	
-	activityHeading.textContent = 'Please select at least one activity in addition to the main conference.';
+	activityHeading.textContent = 'Please select at least one activity';
 	activityHeading.style.color = 'red';
 	activityHeading.scrollIntoView();
 	return false;
