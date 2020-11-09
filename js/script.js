@@ -44,7 +44,7 @@ bitcoin.style.display = 'none';
  *
 */
 function nameValidator(){
-	if(/^[a-zA-Z]+ ?\w+.*?$/.test(name.value) ){
+	if(/^[a-zA-Z]* ?\w+.*?$/.test(name.value) ){
 		name.previousElementSibling.textContent = "Name:";
 		name.previousElementSibling.style.color = 'black';
 		name.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
@@ -210,13 +210,16 @@ email.addEventListener('keyup', (e) => {
 otherJobRoleInput.addEventListener('blur', (e) => {
 	jobRoleValidator();
 });
-creditCardNumber.addEventListener('change', (e) => {
+otherJobRoleInput.addEventListener('keyup', (e) => {
+	jobRoleValidator();
+});
+creditCardNumber.addEventListener('keyup', (e) => {
 	creditCardNumberValidator();
 });
-zipCode.addEventListener('change', (e) => {
+zipCode.addEventListener('keyup', (e) => {
 	zipCodeValidator();
 });
-cvv.addEventListener('change', (e) => {
+cvv.addEventListener('keyup', (e) => {
 	cvvValidator();
 });
 
