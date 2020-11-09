@@ -77,12 +77,12 @@ function emailValidator(){
 	
 function jobRoleValidator(){
 	if( jobRoleInput.value === 'other' ){
-		if (/^\w+/.test(otherJobRoleInput.value) && otherJobRoleInput.value !== 'Your Job Role'  ) {
+		if (/^\w+/.test(otherJobRoleInput.value) ) {
 			otherJobRoleInput.style.color = 'black';
 			otherJobRoleInput.style.cssText = 'color: black; border: 2px solid rgb(111, 157, 220);';
 			return true;
 		}
-		otherJobRoleInput.value = "Your Job Role";
+		otherJobRoleInput.setAttribute('placeholder','Enter your job role');
 		otherJobRoleInput.style.color = 'red';
 		otherJobRoleInput.style.cssText = 'color: red; border: 2px solid red';
 		return false;
@@ -183,19 +183,20 @@ function cvvValidator(){
 //Run each validation function and return a true or false if all of them pass
 //Only validate credit card field if that is the payment method currently selected
 function validateForm(){
-	let isValidated = false;
-	isValidated = nameValidator();
-	isValidated = emailValidator();
-	isValidated = jobRoleValidator();
-	isValidated = themeSelectValidator();
-	isValidated = activityCheckboxesValidator();
+	let flags = 0;
+	nameValidator()?'' : flags++;
+	emailValidator()?'' : flags++;
+	jobRoleValidator()?'' : flags++;
+	themeSelectValidator()?'' : flags++;
+	activityCheckboxesValidator()?'' : flags++;
 	if ( paymentSelect.value === 'credit card' ){
-		isValidated = creditCardNumberValidator();
-		isValidated = zipCodeValidator();
-		isValidated = cvvValidator();
+		creditCardNumberValidator()?'' : flags++;
+		zipCodeValidator()?'' : flags++;
+		cvvValidator()?'' : flags++;
 	}
 	
-	return isValidated;
+	const passOrFail = flags > 0? false : true;
+	return passOrFail;
 
 }
 // Call the validateForm function on submit
@@ -231,6 +232,8 @@ cvv.addEventListener('keyup', (e) => {
 jobRoleInput.addEventListener('change', e => {
 	if( event.target.value === 'other' ){
 		otherJobRoleInput.style.display = '';
+		otherJobRoleInput.value = '';
+		otherJobRoleInput.setAttribute('placeholder', 'Your Job Role');
 		otherJobRoleInput.focus();
 	} else {
 		otherJobRoleInput.style.display = 'none';
