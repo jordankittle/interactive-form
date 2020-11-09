@@ -215,9 +215,6 @@ email.addEventListener('keyup', (e) => {
 otherJobRoleInput.addEventListener('blur', (e) => {
 	jobRoleValidator();
 });
-otherJobRoleInput.addEventListener('keyup', (e) => {
-	jobRoleValidator();
-});
 creditCardNumber.addEventListener('keyup', (e) => {
 	creditCardNumberValidator();
 });
