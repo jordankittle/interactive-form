@@ -124,7 +124,6 @@ function activityCheckboxesValidator(){
 	
 	activityHeading.textContent = 'Please select at least one activity';
 	activityHeading.style.color = 'red';
-	activityHeading.scrollIntoView();
 	return false;
 }
 
@@ -195,8 +194,7 @@ function validateForm(){
 		cvvValidator()?'' : flags++;
 	}
 	
-	const passOrFail = flags > 0? false : true;
-	return passOrFail;
+	return flags > 0? false: true;
 
 }
 // Call the validateForm function on submit
@@ -320,6 +318,7 @@ document.querySelector('.activities').addEventListener('change', e => {
 	}
 	totalPriceLabel.innerHTML = `<h2>Total: $${costOfActivities}</h2>`;
 	totalPrice = costOfActivities;
+	activityCheckboxesValidator();
 });
 
 
