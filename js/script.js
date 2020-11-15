@@ -204,7 +204,7 @@ form.addEventListener('submit', (e) => {
 		e.preventDefault();
 	}
 });
-
+//set event listeners on fields for individual validation
 name.addEventListener('keyup', (e) => {
 	nameValidator();
 });
@@ -226,7 +226,7 @@ cvv.addEventListener('keyup', (e) => {
 
 
 
-//Set even listener on job role and display other-title input if 'other' is selected
+//Set event listener on job role and display other-title input if 'other' is selected
 jobRoleInput.addEventListener('change', e => {
 	if( event.target.value === 'other' ){
 		otherJobRoleInput.style.display = '';
